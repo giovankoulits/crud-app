@@ -1,0 +1,12 @@
+{
+  "dependencies": {
+    "date-fns": "^2.30.0",
+    "uuid": "^9.0.1"
+  },
+  "scripts": {
+    "test": "echo\"Error: no test specified\" && exit 1",
+    "presay": "node foo.js presay",
+    "say": "node foo.js say",
+    "postsay": "node foo.js postsay"
+  }
+}
