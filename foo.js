@@ -2,4 +2,12 @@ function say(word) {
   return 'doing some stuff' + word;
 }
 
-module.exports = say;
+const myObj = {
+  MyClass: class MyClass {
+    constructor(name) {
+      this.name = name;
+    }
+  },
+};
+
+module.exports = myObj;
