@@ -1,105 +1,50 @@
-// A BASIC Node server
-// Routing Requests
-
-const http = require("http");
+const https = require("https");
 const url = require("url");
+const Stream = require("stream").Transform;
+const fs = require("fs");
+const path = require("path");
 
-const server = http.createServer(function (req, res) {
-  //console.log(req.url);
-  let parsedURL = url.parse(req.url, true);
-  let path = parsedURL.pathname;
-  // parsedURL.pathname  parsedURL.query
-  // standardize the requested url by removing any '/' at the start or end
-  // '/folder/to/file/' becomes 'folder/to/file'
-  path = path.replace(/^\/+|\/+$/g, "");
-  console.log(path);
-  let qs = parsedURL.query;
-  let headers = req.headers;
-  let method = req.method.toLowerCase();
+/* const server = http.createServer(function (req, res) {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  const path = url.parse(req.url);
+  const chunks = [];
 
-  req.on("data", function () {
-    console.log("got some data");
-    //if no data is passed we don't see this messagee
-    //but we still need the handler so the "end" function works.
+  req.on("data", (chunk) => chunks.push(chunk));
+  req.on("end", () => {
+    const buffer = Buffer.concat(chunks);
+    const quote = buffer.toString();
+    console.log(quote);
   });
-  req.on("end", function () {
-    //request part is finished... we can send a response now
-    console.log("send a response");
-    //we will use the standardized version of the path
-    let route =
-      typeof routes[path] !== "undefined" ? routes[path] : routes["notFound"];
-    let data = {
-      path: path,
-      queryString: qs,
-      headers: headers,
-      method: method,
-    };
-    //pass data incase we need info about the request
-    //pass the response object because router is outside our scope
-    route(data, res);
-  });
+  res.end();
 });
 
 server.listen(3000, function () {
   console.log("Listening on port 3000");
+}); */
+
+https.get("https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY", (resp) => {
+  let data = "";
+  resp.on("data", (chunk) => (data += chunk));
+
+  resp.on("end", () => {
+    let url = JSON.parse(data).hdurl;
+    //console.log(url);
+    https.get(url, (res) => {
+      if (
+        res.statusCode === 200 &&
+        res.headers["content-type"] === "image/png"
+      ) {
+        let img = new Stream();
+        res.on("data", (chunk) => img.push(chunk));
+        res.on("end", () => {
+          if (!fs.existsSync("./spacepic")) {
+            fs.mkdirSync("./spacepic");
+          }
+
+          let filename = path.join(__dirname + "/spacepic" + "/spacepic.png");
+          fs.writeFileSync(filename, img.read());
+        });
+      }
+    });
+  });
 });
-
-//define functions for the different Routes
-//This object and the functions could be defined in another file that we import
-//Each route has a function that takes two parameters
-//data: the info about the request
-//callback: the function to call to send the response
-let routes = {
-  kenny: function (data, res) {
-    // this function called if the path is 'kenny'
-    let payload = {
-      name: "Kenny",
-    };
-    let payloadStr = JSON.stringify(payload);
-    res.setHeader("Content-Type", "application/json");
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.writeHead(200);
-    res.write(payloadStr);
-    res.end("\n");
-  },
-  cartman: function (data, res) {
-    // this function called if the path is 'cartman'
-    let payload = {
-      name: "Cartman",
-    };
-    let payloadStr = JSON.stringify(payload);
-    res.setHeader("Content-Type", "application/json");
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.writeHead(200);
-    res.write(payloadStr);
-    res.end("\n");
-  },
-  "kenny/is/mysterion": function (data, res) {
-    //this function called if path is 'kenny/is/mysterion'
-    let payload = {
-      name: "Mysterion",
-      enemy: "The Coon",
-      today: +new Date(),
-    };
-    let payloadStr = JSON.stringify(payload);
-    res.setHeader("Content-Type", "application/json");
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.writeHead(200);
-    res.write(payloadStr);
-    res.end("\n");
-  },
-  notFound: function (data, res) {
-    //this one gets called if no route matches
-    let payload = {
-      message: "File Not Found",
-      code: 404,
-    };
-    let payloadStr = JSON.stringify(payload);
-    res.setHeader("Content-Type", "application/json");
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.writeHead(404);
-
-    res.write(payloadStr);
-    res.end("\n");
-  },
-};

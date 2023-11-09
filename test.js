@@ -1,21 +1,18 @@
-const fsPromises = require('fs').promises;
-const path = require('node:path');
+const event = require("events");
+class Dog extends event.EventEmitter {}
 
-const str = 'Henlo friend! \n';
+const dog = new Dog();
 
-(async function main() {
-  try {
-    await fsPromises.appendFile(
-      path.join(__dirname, 'logs', 'eventlog.txt'),
-      str
-    );
-    const readFile = await fsPromises.readFile(
-      path.join(__dirname, 'logs', 'eventlog.txt'),
-      { encoding: 'utf8', flag: 'r' }
-    );
+dog.on("bark", () => {
+  console.log("Woof! Woof!");
+});
 
-    console.log(readFile);
-  } catch (error) {
-    console.error(error);
-  }
-})();
+dog.on("wagTail", () => {
+  console.log("Spin! Spin!");
+});
+
+dog.emit("bark");
+dog.emit("wagTail");
+console.log(dog.eventNames());
+dog.removeAllListeners();
+console.log(dog.eventNames());
