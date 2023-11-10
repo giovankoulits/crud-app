@@ -1,18 +1,10 @@
-const event = require("events");
-class Dog extends event.EventEmitter {}
+// Import the url module from Node.js
+const url = require("url");
 
-const dog = new Dog();
+// Parse an URL string into its segments
+const myURL = url.parse(
+  "http://localhost:3000/pathname?search=test#hash?henlo=me",
+  true
+);
 
-dog.on("bark", () => {
-  console.log("Woof! Woof!");
-});
-
-dog.on("wagTail", () => {
-  console.log("Spin! Spin!");
-});
-
-dog.emit("bark");
-dog.emit("wagTail");
-console.log(dog.eventNames());
-dog.removeAllListeners();
-console.log(dog.eventNames());
+console.log(myURL);

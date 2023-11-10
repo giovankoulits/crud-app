@@ -7,10 +7,17 @@
     "formidable": "^3.5.1",
     "uuid": "^9.0.1"
   },
+  "nodemonConfig": {
+    "watch": [
+      "./test.js",
+      "./test2.js"
+    ]
+  },
   "scripts": {
     "test": "echo\"Error: no test specified\" && exit 1",
-    "presay": "node foo.js presay",
-    "say": "node foo.js say",
-    "postsay": "node foo.js postsay"
+    "watch": "nodemon node test.js; node test2.js;"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
   }
 }
