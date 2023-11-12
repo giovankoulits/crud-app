@@ -4,12 +4,29 @@ const url = require("url");
 const fs = require("fs");
 const path = require("path");
 require("dotenv").config();
+
 const port = process.env.PORT;
 const server = http.createServer(function (req, res) {
+  //
+
+  const filter = /[\/]/g;
+  const myUrl = url.parse(req.url);
+  const parsedUrl = myUrl.pathname.replace(filter, "");
+  const file = path.join(__dirname, "public", parsedUrl);
+
+  fs.readFile(file, (err, data) => {
+    if (err) {
+      console.log(`File not found ${file}`);
+      res.writeHead(404);
+      res.end();
+    } else {
+      res.writeHead(200, { "Content-type": "text/html" });
+      res.end(data);
+    }
+  });
+
+  /*
   const file = path.join(__dirname, "spacepic", "spacepic.jpg");
-  const headers = {
-    "Access-Control-Allow-Origin": "*",
-  };
   if (fs.existsSync(file.toString())) {
     fs.readFile(file, (err, data) => {
       if (err) {
@@ -32,7 +49,7 @@ const server = http.createServer(function (req, res) {
       "content-type": "text/html;",
     });
     res.end("<h1>no such file</h1>");
-  }
+  } */
 });
 
 server.listen(3000, () => console.log(`Listening on port ${port}`));
