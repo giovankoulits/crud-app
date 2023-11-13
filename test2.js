@@ -1,2 +1,1 @@
-let str = "strings";
-console.log(str);
+const obj = { s: "hi" };

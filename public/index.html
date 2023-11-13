@@ -8,15 +8,42 @@
   </head>
   <body>
     <h1>Southpark Quotes</h1>
-    <h2>Incoming Quote</h2>
-    <div class="container">
-      <button>Stan</button>
-      <button>Kenny</button>
-      <button>Kyle</button>
-      <button>Cartman</button>
-      <button>Randy</button>
-    </div>
+    <h2>Channels <br /></h2>
+    <button onclick="fetchData()">fetch data</button>
+    <button onclick="postData()">post data</button>
 
-    <script src="fetchSouthParkChar.js"></script>
+    <script async>
+      async function fetchData() {
+        const req = await fetch("http://localhost:3000");
+        const data = await req.json();
+        data.channels.forEach(
+          (channel) =>
+            (document.querySelector("h2").innerText +=
+              channel.id + " " + channel.name + "\n")
+        );
+      }
+
+      async function postData() {
+        const req = await fetch("http://localhost:3000", {
+          method: "POST",
+          Headers: {
+            Accept: "application.json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            id: 7,
+            name: "Net Nioh",
+            last_update: 1567674507000,
+          }),
+        });
+
+        /*     const data = await req.json();
+        data.channels.forEach(
+          (channel) =>
+            (document.querySelector("h2").innerText +=
+              channel.id + " " + channel.name + "\n")
+        ); */
+      }
+    </script>
   </body>
 </html>
