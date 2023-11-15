@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register and Login</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../styles/style.css" />
+  </head>
+  <body>
+    <section>
+      <form action="/#" id="regForm" method="POST" autocomplete="off">
+        <legend>
+          <fieldset>Register</fieldset>
+          <div class="formBox">
+            <label for="email">Email</label
+            ><input class="email" type="email" autocomplete="off" />
+          </div>
+          <div class="formBox">
+            <label for="pass">Password</label
+            ><input class="password" type="password" autocomplete="off" />
+          </div>
+          <div class="formBox"><button>Register</button></div>
+        </legend>
+      </form>
+    </section>
+    <section>
+      <form action="/#" id="loginForm" method="POST" autocomplete="off">
+        <legend>
+          <fieldset>Login</fieldset>
+          <div class="formBox">
+            <label for="email">Email</label
+            ><input class="email" type="email" autocomplete="off" />
+          </div>
+          <div class="formBox">
+            <label for="pass">Password</label
+            ><input class="password" type="password" autocomplete="off" />
+          </div>
+          <div class="formBox"><button>Login</button></div>
+        </legend>
+      </form>
+    </section>
+    <script defer>
+      //process the login and the register
+      document
+        .querySelector("#regForm button")
+        .addEventListener("click", doReg);
+
+      document
+        .querySelector("#loginForm button")
+        .addEventListener("click", doLogin);
+
+      function doReg(event) {
+        event.preventDefault();
+        const email = document.querySelector("#regForm .email").value;
+        const password = document.querySelector("#regForm .password").value;
+        const user = { email, password };
+        sendData(user, "register");
+      }
+
+      function doLogin(ev) {
+        console.log(ev);
+      }
+
+      function sendData(user, endpoint, callback) {
+        if (endpoint === "register") {
+          let url = `http://localhost:3000/${endpoint}`;
+          const myHeaders = new Headers();
+          myHeaders.append("Content-Type", "application/json");
+          const request = new Request(url, {
+            method: "POST",
+            headers: myHeaders,
+            body: JSON.stringify(user),
+          });
+          fetch(request)
+            .then((res) => res.json())
+            .then((data) => console.log(data));
+        }
+      }
+
+      function loginSuccess(data) {}
+
+      function registerSuccess(data) {}
+
+      function failure(err) {}
+    </script>
+  </body>
+</html>
