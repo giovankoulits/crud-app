@@ -61,12 +61,16 @@
         sendData(user, "register");
       }
 
-      function doLogin(ev) {
-        console.log(ev);
+      function doLogin(event) {
+        event.preventDefault();
+        const email = document.querySelector("#loginForm .email").value;
+        const password = document.querySelector("#loginForm .password").value;
+        const user = { email, password };
+        sendData(user, "login");
       }
 
       function sendData(user, endpoint, callback) {
-        if (endpoint === "register") {
+        if (endpoint === "register" || endpoint === "login") {
           let url = `http://localhost:3000/${endpoint}`;
           const myHeaders = new Headers();
           myHeaders.append("Content-Type", "application/json");
