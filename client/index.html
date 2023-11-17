@@ -47,18 +47,18 @@
       //process the login and the register
       document
         .querySelector("#regForm button")
-        .addEventListener("click", doReg);
+        .addEventListener("click", doRegister);
 
       document
         .querySelector("#loginForm button")
         .addEventListener("click", doLogin);
 
-      function doReg(event) {
+      function doRegister(event) {
         event.preventDefault();
         const email = document.querySelector("#regForm .email").value;
         const password = document.querySelector("#regForm .password").value;
         const user = { email, password };
-        sendData(user, "register");
+        sendData(user, "register", registerSuccess);
       }
 
       function doLogin(event) {
@@ -66,7 +66,7 @@
         const email = document.querySelector("#loginForm .email").value;
         const password = document.querySelector("#loginForm .password").value;
         const user = { email, password };
-        sendData(user, "login");
+        sendData(user, "login", loginSuccess);
       }
 
       function sendData(user, endpoint, callback) {
@@ -81,15 +81,35 @@
           });
           fetch(request)
             .then((res) => res.json())
-            .then((data) => console.log(data));
+            .then((content) => {
+              if ("error" in content) {
+                failure(content.error);
+              }
+              if ("data" in content) {
+                callback(content.data);
+              }
+            })
+            .catch(failure);
         }
       }
 
-      function loginSuccess(data) {}
+      function loginSuccess(data) {
+        //we have a token so put it in localstorage
+        console.log("token", data.token);
+        sessionStorage.setItem("myapp-token", data.token);
+        alert("You are logged in");
+      }
 
-      function registerSuccess(data) {}
+      function registerSuccess(data) {
+        //user has been registered
+        console.log("new user created", data);
+        alert("You have been registered");
+      }
 
-      function failure(err) {}
+      function failure(err) {
+        alert(err.message);
+        console.log(err.code, err.message);
+      }
     </script>
   </body>
 </html>
