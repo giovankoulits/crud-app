@@ -11,34 +11,49 @@ const port = process.env.DEV_PORT;
 const bcrypt = require("bcrypt");
 const saltRounds = 13;
 const { compareAsc, format } = require("date-fns");
-//express
+const { v4: uuidv4 } = require("uuid");
+//express libs
 const express = require("express");
 const app = express();
-var cors = require("cors");
-app.use(express.json());
-app.use(cors());
+const cors = require("cors");
+var bodyParser = require("body-parser");
+app.use(bodyParser.json());
 const cookieParser = require("cookie-parser");
 app.use(cookieParser());
-
-//
 const { users } = require("./db.json");
+const cookieOptions = require("./cookieOptions.js");
+app.use(
+  cors({
+    origin: "http://127.0.0.1:5500",
+    credentials: true,
+    methods: ["GET", "POST"],
+  })
+);
 
 app.post("/register", async (req, res) => {
   if (req.body.password && req.body.email) {
     const { email, password } = req.body;
-
-    if (users.some((user) => user.email === email)) {
+    console.log(email, password);
+    if (users.find((user) => user.email === email)) {
       res.status(409).json({
         error: { code: 409, message: "Conflict! User already exists." },
       });
     } else {
-      let passHash = await bcrypt.hash(password, saltRounds);
+      //cookie
+      const cookieKey = "token";
+      const cookieValue = uuidv4();
+      res.cookie(cookieKey, cookieValue, cookieOptions);
+
+      let hashedPass = await bcrypt.hash(password, saltRounds);
+
       const newUser = {
         _id: Date.now(),
         email,
-        passHash,
+        hashedPass,
         date: format(new Date(Date.now()), "yyyy-MM-dd'T'HH:mm:ss"),
+        loginToken: cookieValue,
       };
+
       users.push(newUser);
       try {
         fs.writeFileSync("./db.json", JSON.stringify({ users }));
@@ -53,11 +68,14 @@ app.post("/register", async (req, res) => {
 });
 
 app.post("/login", async (req, res) => {
-  if (req.body.password && req.body.email) {
+  console.log(req.cookies);
+  const loggedIn = users.find((user) => user.token === req.cookies.token);
+  if (loggedIn) {
+    res.json({ msg: "already logged in" });
+  } else if (req.body.password && req.body.email) {
     const { email, password } = req.body;
     const userMatch = users.find((user) => user.email === email);
     let submittedPass = password; //plain text from browser
-    console.log(submittedPass);
     if (userMatch) {
       let savedPass = userMatch.hashedPass; //that has been hashed
       const passwordDidMatch = await bcrypt.compare(submittedPass, savedPass);

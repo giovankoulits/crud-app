@@ -54,6 +54,7 @@
         .addEventListener("click", doLogin);
 
       function doRegister(event) {
+        console.log("login");
         event.preventDefault();
         const email = document.querySelector("#regForm .email").value;
         const password = document.querySelector("#regForm .password").value;
@@ -69,19 +70,31 @@
         sendData(user, "login", loginSuccess);
       }
 
+      function goToAccount() {
+        fetch("http://localhost:3000", {
+          mode: "cors",
+          credentials: "include",
+        });
+      }
+
       function sendData(user, endpoint, callback) {
+        /*       if(!endpoint){
+          function go
+        } */
         if (endpoint === "register" || endpoint === "login") {
           let url = `http://localhost:3000/${endpoint}`;
-          const myHeaders = new Headers();
-          myHeaders.append("Content-Type", "application/json");
           const request = new Request(url, {
+            headers: { "Content-Type": "application/json" },
             method: "POST",
-            headers: myHeaders,
             body: JSON.stringify(user),
+            mode: "cors",
+            credentials: "include",
           });
+
           fetch(request)
             .then((res) => res.json())
             .then((content) => {
+              console.log(content);
               if ("error" in content) {
                 failure(content.error);
               }

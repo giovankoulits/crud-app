@@ -1,1 +1,11 @@
-{"users":[{"_id":1700150697887,"email":"jovan.com","hashedPass":"$2b$13$NrKLvcIg2puI4ctl3LWhd.9T1E9N5gjGrFxZXWLsGTo/wISfr3e6q"},{"_id":1700218494540,"email":"george.com","hashedPass":"$2b$13$arZb1Fx0HsmY3YS46jtyoePW6oYoMQ9kX.XjN86RnocUqksIpMjsK","date":"2023-11-17T12:54:54"},{"_id":1700221311316,"email":"kendo","passHash":"$2b$13$5z6WlEzM2eqDz2uAiuZROOUBhWwa8Bx3IasojHLxMbqkdH93kV0gy","date":"2023-11-17T13:41:51"}]}
+{
+  "users": [
+    {
+      "_id": 1700672104822,
+      "email": "jovan.com",
+      "hashedPass": "$2b$13$Mnhpngq81P7.8mim0vBSPezTcHDhsQN3nC5K1XG7J0g95rKiQTr46",
+      "date": "2023-11-22T18:55:04",
+      "loginToken": "09a8c641-d03e-48ec-8f31-09102abc462d"
+    }
+  ]
+}
