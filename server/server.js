@@ -22,6 +22,7 @@ const cookieParser = require("cookie-parser");
 app.use(cookieParser());
 const { users } = require("./db.json");
 const cookieOptions = require("./cookieOptions.js");
+
 app.use(
   cors({
     origin: "http://127.0.0.1:5500",
@@ -29,7 +30,12 @@ app.use(
     methods: ["GET", "POST"],
   })
 );
+app.set("view engine", "ejs");
 
+/* app.get("/account", (req, res) => {
+  res.render("pages/account", { data: { test: "henlo" } });
+});
+ */
 app.post("/register", async (req, res) => {
   if (req.body.password && req.body.email) {
     const { email, password } = req.body;
@@ -57,7 +63,7 @@ app.post("/register", async (req, res) => {
       users.push(newUser);
       try {
         fs.writeFileSync("./db.json", JSON.stringify({ users }));
-        res.status(201).json({ data: newUser });
+        res.status(200).render("pages/account", { data: { email, password } });
       } catch (err) {
         res.status(401).json({
           error: { code: 401, message: "invalid username or password." },
@@ -68,7 +74,6 @@ app.post("/register", async (req, res) => {
 });
 
 app.post("/login", async (req, res) => {
-  console.log(req.cookies);
   const loggedIn = users.find((user) => user.token === req.cookies.token);
   if (loggedIn) {
     res.json({ msg: "already logged in" });
@@ -80,7 +85,11 @@ app.post("/login", async (req, res) => {
       let savedPass = userMatch.hashedPass; //that has been hashed
       const passwordDidMatch = await bcrypt.compare(submittedPass, savedPass);
       if (passwordDidMatch) {
-        res.status(200).json({ data: { token: "this is a pretend token" } });
+        /*   res.sendFile(
+          path.join(__dirname, "../client", "account.html"),
+          (err) => console.log
+        ); */
+        res.status(200).render("pages/account", { data: { email, password } });
       } else {
         res.status(401).json({
           error: { code: 401, message: "invalid username or password." },

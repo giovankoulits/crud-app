@@ -1,11 +1,1 @@
-{
-  "users": [
-    {
-      "_id": 1700672104822,
-      "email": "jovan.com",
-      "hashedPass": "$2b$13$Mnhpngq81P7.8mim0vBSPezTcHDhsQN3nC5K1XG7J0g95rKiQTr46",
-      "date": "2023-11-22T18:55:04",
-      "loginToken": "09a8c641-d03e-48ec-8f31-09102abc462d"
-    }
-  ]
-}
+{"users":[{"_id":1700672104822,"email":"jovan.com","hashedPass":"$2b$13$Mnhpngq81P7.8mim0vBSPezTcHDhsQN3nC5K1XG7J0g95rKiQTr46","date":"2023-11-22T18:55:04","loginToken":"09a8c641-d03e-48ec-8f31-09102abc462d"},{"_id":1700764406061,"email":"baba","hashedPass":"$2b$13$6iByz4pb/NAnOHQiVBNgm.p3C1yjZLG4FkYE7byeigGxnoDzP9Dxe","date":"2023-11-23T20:33:26","loginToken":"1a977075-9bd4-4145-8d43-c1d1a6d786d1"},{"_id":1700764482292,"email":"mario","hashedPass":"$2b$13$zZF7GQFfc3ormoGrqYQfA.1oWaRzgLwWY57f5vovhTnSVkp65/xkO","date":"2023-11-23T20:34:42","loginToken":"cb78fd8a-7b7d-4c34-a3d4-da1023d5c4fd"},{"_id":1700765194471,"email":"luigi","hashedPass":"$2b$13$g7nNh0IXl13ySw.AVIFQLOS8y7HYrjAs4P1lBPLO/h.YXZ1GYa35G","date":"2023-11-23T20:46:34","loginToken":"41591284-5350-4e04-87e8-ab29506ce425"}]}

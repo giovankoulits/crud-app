@@ -54,12 +54,11 @@
         .addEventListener("click", doLogin);
 
       function doRegister(event) {
-        console.log("login");
         event.preventDefault();
         const email = document.querySelector("#regForm .email").value;
         const password = document.querySelector("#regForm .password").value;
         const user = { email, password };
-        sendData(user, "register", registerSuccess);
+        sendData(user, "register");
       }
 
       function doLogin(event) {
@@ -67,20 +66,10 @@
         const email = document.querySelector("#loginForm .email").value;
         const password = document.querySelector("#loginForm .password").value;
         const user = { email, password };
-        sendData(user, "login", loginSuccess);
+        sendData(user, "login");
       }
 
-      function goToAccount() {
-        fetch("http://localhost:3000", {
-          mode: "cors",
-          credentials: "include",
-        });
-      }
-
-      function sendData(user, endpoint, callback) {
-        /*       if(!endpoint){
-          function go
-        } */
+      function sendData(user, endpoint) {
         if (endpoint === "register" || endpoint === "login") {
           let url = `http://localhost:3000/${endpoint}`;
           const request = new Request(url, {
@@ -92,36 +81,16 @@
           });
 
           fetch(request)
-            .then((res) => res.json())
+            .then((res) => res.text())
             .then((content) => {
-              console.log(content);
-              if ("error" in content) {
-                failure(content.error);
-              }
-              if ("data" in content) {
-                callback(content.data);
-              }
+              if (endpoint === "login") alert("successful login");
+              if (endpoint === "register") alert("successful register");
+              document.open();
+              document.write(content);
+              document.close();
             })
-            .catch(failure);
+            .catch((err) => console.log(err));
         }
-      }
-
-      function loginSuccess(data) {
-        //we have a token so put it in localstorage
-        console.log("token", data.token);
-        sessionStorage.setItem("myapp-token", data.token);
-        alert("You are logged in");
-      }
-
-      function registerSuccess(data) {
-        //user has been registered
-        console.log("new user created", data);
-        alert("You have been registered");
-      }
-
-      function failure(err) {
-        alert(err.message);
-        console.log(err.code, err.message);
       }
     </script>
   </body>
