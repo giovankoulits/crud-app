@@ -23,19 +23,25 @@ app.use(cookieParser());
 const { users } = require("./db.json");
 const cookieOptions = require("./cookieOptions.js");
 
+app.use(express.static(__dirname + "/public"));
+app.set("view engine", "ejs");
 app.use(
   cors({
-    origin: "http://127.0.0.1:5500",
+    origin: ["http://127.0.0.1:5500", "http://127.0.0.1:3000"],
     credentials: true,
     methods: ["GET", "POST"],
   })
 );
-app.set("view engine", "ejs");
+const things = require("./routes/things.js");
+const auth = require("./routes/auth.js");
 
-/* app.get("/account", (req, res) => {
-  res.render("pages/account", { data: { test: "henlo" } });
+app.use("/things", things);
+app.use("/auth", auth);
+
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "client", "index.html"));
 });
- */
+
 app.post("/register", async (req, res) => {
   if (req.body.password && req.body.email) {
     const { email, password } = req.body;
@@ -85,11 +91,7 @@ app.post("/login", async (req, res) => {
       let savedPass = userMatch.hashedPass; //that has been hashed
       const passwordDidMatch = await bcrypt.compare(submittedPass, savedPass);
       if (passwordDidMatch) {
-        /*   res.sendFile(
-          path.join(__dirname, "../client", "account.html"),
-          (err) => console.log
-        ); */
-        res.status(200).render("pages/account", { data: { email, password } });
+        res.status(200).render("account", { data: { email, password } });
       } else {
         res.status(401).json({
           error: { code: 401, message: "invalid username or password." },

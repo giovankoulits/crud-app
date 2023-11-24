@@ -5,6 +5,7 @@ html {
 }
 h1 {
   font-weight: 300;
+  color: #4caf50;
 }
 form {
   padding: 0 2rem;
