@@ -1,0 +1,18 @@
+{
+  "users": [
+    {
+      "_id": 1700672104822,
+      "email": "jovan.com",
+      "hashedPass": "$2b$13$Mnhpngq81P7.8mim0vBSPezTcHDhsQN3nC5K1XG7J0g95rKiQTr46",
+      "date": "2023-11-22T18:55:04",
+      "loginToken": "09a8c641-d03e-48ec-8f31-09102abc462d"
+    },
+    {
+      "_id": 1700939168243,
+      "email": "enki",
+      "hashedPass": "$2b$13$oCsbREcUJ/nEpkZMXVWzEOe7xjOotVitua2OhQnB/Bd10r680EWOq",
+      "date": "2023-11-25T21:06:08",
+      "loginToken": "f5ace8c9-3794-4869-9868-5db1b0897f4d"
+    }
+  ]
+}

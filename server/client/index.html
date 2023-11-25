@@ -81,7 +81,7 @@
           });
 
           fetch(request)
-            .then((res) => res.text())
+            .then((res) => res.json())
             .then((content) => {
               if (endpoint === "login") alert("successful login");
               if (endpoint === "register") alert("successful register");
