@@ -10,7 +10,11 @@ const userSchema = new mongoose.Schema({
     required: [true, "Please enter an email"],
     unique: true,
     lowercase: true,
-    validate: [isEmail, "Please enter a valid email"],
+    /*  validate: [isEmail, "Please enter a valid email"], */
+    validate: {
+      validator: isEmail,
+      message: () => `Please enter a valid email`,
+    },
   },
   password: {
     type: String,
@@ -21,7 +25,6 @@ const userSchema = new mongoose.Schema({
 
 userSchema.pre("save", async function (next) {
   this.password = await bcrypt.hash(this.password, saltRounds);
-
   next();
 });
 
