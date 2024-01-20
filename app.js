@@ -17,7 +17,6 @@ const dbURI =
 mongoose
   .connect(dbURI)
   .then((result) => {
-    console.log(result);
     app.listen(3000, () => console.log("listening on port 3000"));
   })
   .catch((err) => console.log(err));
