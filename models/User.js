@@ -8,11 +8,7 @@ const userSchema = new mongoose.Schema({
     required: [true, "Please enter an email"],
     unique: true,
     lowercase: true,
-    /*  validate: [isEmail, "Please enter a valid email"], */
-    validate: {
-      validator: isEmail,
-      message: () => `Please enter a valid email`,
-    },
+    validate: [isEmail, "Please enter a valid email"],
   },
   password: {
     type: String,
@@ -21,6 +17,7 @@ const userSchema = new mongoose.Schema({
   },
 });
 
+// fire a function before doc saved to db
 userSchema.pre("save", async function (next) {
   const salt = await bcrypt.genSalt();
   this.password = await bcrypt.hash(this.password, salt);
