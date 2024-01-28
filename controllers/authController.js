@@ -4,7 +4,6 @@
 //
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
-const cookieParser = require("cookie-parser");
 
 // handle errors
 const handleErrors = (err) => {
